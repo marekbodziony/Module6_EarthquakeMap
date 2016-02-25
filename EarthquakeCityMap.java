@@ -142,30 +142,29 @@ public class EarthquakeCityMap extends PApplet {
 	// and then call that method from setUp
 	private void sortAndPrint(int numToPrint){
 		
-		 Object [] dataToPrint = quakeMarkers.toArray();
+		int [] dataToPrint = {9,4,1,5,2,7,6,3,8,11,10,4};
 		 
 		 // sorting data
-		 for (int i = 1; i < dataToPrint.length-1; i++){
-			int bigger = i-1;
-			int current = i;
+		int current;
+		for (int pos = 1; pos < dataToPrint.length; pos++){
+			current = pos;
 			
-			for(int j = 0; j < current; j++){
-				if (current >= bigger){
-					dataToPrint[bigger] = dataToPrint[current];
-				}
-				else{
-					current = current -1;
-				}
+			
+			while (current > 0 && dataToPrint[current] > dataToPrint[current-1]){
+				
+				int dataTemp = dataToPrint[current-1];
+				dataToPrint[current-1] = dataToPrint[current];
+				dataToPrint[current] = dataTemp;
+				current = current-1;
 			}
-			 
 		 }
-		 // printing data ("numToPrint" elements)
-		 for (int i = 0; i < numToPrint; i++){
+		 // printing data ("numToPrint" elements will be printed)
+		 for (int j = 0; j < numToPrint; j++){
 			 
-			 System.out.println(dataToPrint[i]);
+			 System.out.println(dataToPrint[j]);
 		 }
-	}
 	
+	}
 	
 	/** Event handler that gets called automatically when the 
 	 * mouse moves.
