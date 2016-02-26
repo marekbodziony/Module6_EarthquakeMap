@@ -116,7 +116,7 @@ public class EarthquakeCityMap extends PApplet {
 	    }
 
 	    // could be used for debugging
-	    printQuakes();
+	    //printQuakes();
 	    sortAndPrint(5);
 	 		
 	    // (3) Add markers to map
@@ -142,6 +142,40 @@ public class EarthquakeCityMap extends PApplet {
 	// and then call that method from setUp
 	private void sortAndPrint(int numToPrint){
 		
+		List<EarthquakeMarker> dataToPrint = new ArrayList <EarthquakeMarker>();
+		for (Marker marker : quakeMarkers){
+			dataToPrint.add((EarthquakeMarker)marker);
+		}
+		 // printing data before sorting
+		 for (int j = 0; j < 5; j++){
+			 System.out.println(dataToPrint.get(j));
+		 }
+		 System.out.println("***** po sortowani ******");		
+		 
+		// sorting data
+		int current;
+		for (int pos = 1; pos < 5; pos++){
+			current = pos;
+			
+			
+			while (current > 0 && dataToPrint.get(current).compareTo(dataToPrint.get(current-1)) > 0){
+				
+				EarthquakeMarker dataTemp = dataToPrint.get(current-1);
+				dataToPrint.add(current-1, dataToPrint.get(current));
+				dataToPrint.add(current, dataTemp);
+				
+				current = current-1;
+			}
+		 }
+		 // printing data ("numToPrint" elements will be printed)
+		 for (int j = 0; j < 5; j++){
+			 
+			 System.out.println(dataToPrint.get(j));
+		 }
+	}
+	
+	private void sortAndPrintTest(int numToPrint){
+		
 		int [] dataToPrint = {9,4,1,5,2,7,6,3,8,11,10,4};
 		 
 		 // sorting data
@@ -163,7 +197,6 @@ public class EarthquakeCityMap extends PApplet {
 			 
 			 System.out.println(dataToPrint[j]);
 		 }
-	
 	}
 	
 	/** Event handler that gets called automatically when the 
