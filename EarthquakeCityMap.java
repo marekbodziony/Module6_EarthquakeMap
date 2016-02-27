@@ -147,28 +147,32 @@ public class EarthquakeCityMap extends PApplet {
 			dataToPrint.add((EarthquakeMarker)marker);
 		}
 		 // printing data before sorting
-		 for (int j = 0; j < 5; j++){
+		 for (int j = 0; j < 7; j++){
 			 System.out.println(dataToPrint.get(j));
 		 }
-		 System.out.println("***** po sortowani ******");		
+		 System.out.println("***** po sortowaniu ******");		
 		 
 		// sorting data
 		int current;
-		for (int pos = 1; pos < 5; pos++){
+		for (int pos = 1; pos < 7; pos++){
 			current = pos;
 			
 			
 			while (current > 0 && dataToPrint.get(current).compareTo(dataToPrint.get(current-1)) > 0){
 				
-				EarthquakeMarker dataTemp = dataToPrint.get(current-1);
-				dataToPrint.add(current-1, dataToPrint.get(current));
-				dataToPrint.add(current, dataTemp);
+				EarthquakeMarker tempCurrentMinus1 = dataToPrint.get(current-1);
+				EarthquakeMarker tempCurrent = dataToPrint.get(current);
+				
+				dataToPrint.add(current-1, tempCurrent);
+				dataToPrint.remove(current);
+				dataToPrint.add(current, tempCurrentMinus1);
+				dataToPrint.remove(current+1);
 				
 				current = current-1;
 			}
 		 }
 		 // printing data ("numToPrint" elements will be printed)
-		 for (int j = 0; j < 5; j++){
+		 for (int j = 0; j < 7; j++){
 			 
 			 System.out.println(dataToPrint.get(j));
 		 }
