@@ -117,7 +117,7 @@ public class EarthquakeCityMap extends PApplet {
 
 	    // could be used for debugging
 	    //printQuakes();
-	    sortAndPrint(5);
+	    sortAndPrint(10);
 	 		
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
@@ -137,27 +137,21 @@ public class EarthquakeCityMap extends PApplet {
 	}
 	
 	
-	// TODO: Add the method:
 	//   private void sortAndPrint(int numToPrint)
 	// and then call that method from setUp
 	private void sortAndPrint(int numToPrint){
 		
+		// get dataToPrint from quakeMarkers
 		List<EarthquakeMarker> dataToPrint = new ArrayList <EarthquakeMarker>();
 		for (Marker marker : quakeMarkers){
 			dataToPrint.add((EarthquakeMarker)marker);
-		}
-		 // printing data before sorting
-		 for (int j = 0; j < 7; j++){
-			 System.out.println(dataToPrint.get(j));
-		 }
-		 System.out.println("***** po sortowaniu ******");		
+		}	
 		 
 		// sorting data
 		int current;
-		for (int pos = 1; pos < 7; pos++){
+		for (int pos = 1; pos < dataToPrint.size(); pos++){
 			current = pos;
-			
-			
+						
 			while (current > 0 && dataToPrint.get(current).compareTo(dataToPrint.get(current-1)) > 0){
 				
 				EarthquakeMarker tempCurrentMinus1 = dataToPrint.get(current-1);
@@ -171,35 +165,12 @@ public class EarthquakeCityMap extends PApplet {
 				current = current-1;
 			}
 		 }
-		 // printing data ("numToPrint" elements will be printed)
-		 for (int j = 0; j < 7; j++){
-			 
-			 System.out.println(dataToPrint.get(j));
-		 }
-	}
-	
-	private void sortAndPrintTest(int numToPrint){
 		
-		int [] dataToPrint = {9,4,1,5,2,7,6,3,8,11,10,4};
-		 
-		 // sorting data
-		int current;
-		for (int pos = 1; pos < dataToPrint.length; pos++){
-			current = pos;
-			
-			
-			while (current > 0 && dataToPrint[current] > dataToPrint[current-1]){
-				
-				int dataTemp = dataToPrint[current-1];
-				dataToPrint[current-1] = dataToPrint[current];
-				dataToPrint[current] = dataTemp;
-				current = current-1;
-			}
-		 }
-		 // printing data ("numToPrint" elements will be printed)
+		 // printing sorted data ("numToPrint" elements will be printed)
 		 for (int j = 0; j < numToPrint; j++){
-			 
-			 System.out.println(dataToPrint[j]);
+			 if (j < dataToPrint.size()){
+				 System.out.println(j+1 + ". " + dataToPrint.get(j));
+			 }
 		 }
 	}
 	
