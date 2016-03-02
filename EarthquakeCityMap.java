@@ -57,6 +57,8 @@ public class EarthquakeCityMap extends PApplet {
 	private List<Marker> cityMarkers;
 	// Markers for each earthquake
 	private List<Marker> quakeMarkers;
+	//Markers for tourist attraction
+	private List <Marker> touristAttractionsMarkers;
 
 	// A List of country markers
 	private List<Marker> countryMarkers;
@@ -114,11 +116,21 @@ public class EarthquakeCityMap extends PApplet {
 		    quakeMarkers.add(new OceanQuakeMarker(feature));
 		  }
 	    }
+	    
+	    // 		STEP 4: Reading data of tourist attraction points
+	    List<PointFeature> touristAttractions = ParseFeed.parseAttractions(this, "tourist attractions.txt");
+	    touristAttractionsMarkers = new ArrayList<Marker>();
+	    
+	    for(Feature attraction : touristAttractions){
+	    	System.out.println(attraction.getProperties());
+	    }
 
 	    // could be used for debugging
 	    //printQuakes();
 	    sortAndPrint(10);
 	 		
+	
+	    
 	    // (3) Add markers to map
 	    //     NOTE: Country markers are not added to the map.  They are used
 	    //           for their geometric properties
