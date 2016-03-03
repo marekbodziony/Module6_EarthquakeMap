@@ -16,6 +16,7 @@ import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
 import processing.core.PApplet;
+import processing.event.KeyEvent;
 
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
@@ -65,6 +66,12 @@ public class EarthquakeCityMap extends PApplet {
 	// NEW IN MODULE 5
 	private CommonMarker lastSelected;
 	private CommonMarker lastClicked;
+	
+	// info about markers visibility
+	private boolean quakeVisibility = true;
+	private boolean cityVisibility = true;
+	private boolean attractionVisibility = true;
+	
 	
 	public void setup() {		
 		// (1) Initializing canvas and map tiles
@@ -202,7 +209,6 @@ public class EarthquakeCityMap extends PApplet {
 		selectMarkerIfHover(quakeMarkers);
 		selectMarkerIfHover(cityMarkers);
 		selectMarkerIfHover(touristAttractionsMarkers);
-		//loop();
 	}
 	
 	// If there is a marker selected 
@@ -233,7 +239,9 @@ public class EarthquakeCityMap extends PApplet {
 	public void mouseClicked()
 	{
 		if (lastClicked != null) {
-			unhideMarkers();
+			unhideQuakeMarkers();
+			unhideCityMarkers();
+			unhideAttractionMarkers();
 			lastClicked = null;
 		}
 		else if (lastClicked == null) 
@@ -268,10 +276,12 @@ public class EarthquakeCityMap extends PApplet {
 					if (quakeMarker.getDistanceTo(marker.getLocation()) 
 							> quakeMarker.threatCircle()) {
 						quakeMarker.setHidden(true);
+						quakeVisibility = false;
 					}
 				}
 				for(Marker mhide : touristAttractionsMarkers){
 					mhide.setHidden(true);
+					attractionVisibility = false;
 				}
 				return;
 			}
@@ -298,10 +308,12 @@ public class EarthquakeCityMap extends PApplet {
 					if (mhide.getDistanceTo(marker.getLocation()) 
 							> marker.threatCircle()) {
 						mhide.setHidden(true);
+						cityVisibility = false;
 					}
 				}
 				for (Marker mhide : touristAttractionsMarkers){
 					mhide.setHidden(true);
+					attractionVisibility = true;
 				}
 				return;
 			}
@@ -357,9 +369,87 @@ public class EarthquakeCityMap extends PApplet {
 	}
 	
 	@Override
-	public void keyPressed(){
+	public void keyPressed(KeyEvent event){
 		
+		int letterCode = event.getKeyCode();
+				
+			if (letterCode == 49){			// if "1" is pressed
+				if (quakeVisibility){
+					hideQuakeMarkers();
+					System.out.println("> Hide quake markers");
+				}
+				else if (!quakeVisibility){
+					unhideQuakeMarkers();
+					System.out.println(">> Show quake markers");
+				}
+			}
+			if (letterCode == 50){			// if "2" is pressed
+				if (cityVisibility){
+					hideCityMarkers();
+					System.out.println("> Hide city markers");
+				}
+				else if (!cityVisibility){
+					unhideCityMarkers();
+					System.out.println(">> Show city markers");
+				}
+			}
+			if (letterCode == 51){			// if "3" is pressed
+				if (attractionVisibility){
+					hideAttractionMarkers();
+					System.out.println("> Hide tourust attraction markers");
+				}
+				else if (!attractionVisibility){
+					unhideAttractionMarkers();
+					System.out.println(">> Show tourist attraction markers");
+				}
+			}
 	}
+	
+	//helper method to hide all quakes markers
+	private void hideQuakeMarkers(){
+		for (Marker m : quakeMarkers){
+			m.setHidden(true);
+		}
+		quakeVisibility = false;
+	}
+	//helper method to show all quakes markers
+		private void unhideQuakeMarkers(){
+			for (Marker m : quakeMarkers){
+				m.setHidden(false);
+			}
+			quakeVisibility = true;
+		}
+		
+	//helper method to hide all cities markers
+		private void hideCityMarkers(){
+			for (Marker m : cityMarkers){
+				m.setHidden(true);
+			}
+			cityVisibility = false;
+		}
+	//helper method to show all cities markers
+			private void unhideCityMarkers(){
+				for (Marker m : cityMarkers){
+					m.setHidden(false);
+				}
+				cityVisibility = true;
+			}
+		
+	// helper method to hide all tourist attractions markers
+	private void hideAttractionMarkers(){
+		for (Marker m : touristAttractionsMarkers){
+			m.setHidden(true);
+		}
+		attractionVisibility = false;
+	}
+	// helper method to show all tourist attractions markers
+		private void unhideAttractionMarkers(){
+			for (Marker m : touristAttractionsMarkers){
+				m.setHidden(false);
+			}
+			attractionVisibility = true;
+		}
+	
 	// helper method to draw key in GUI
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here
