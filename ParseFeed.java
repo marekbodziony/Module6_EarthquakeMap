@@ -252,7 +252,7 @@ public class ParseFeed {
 			point.addProperty("name", columns[1]);
 			point.putProperty("city", columns[4]);
 			point.putProperty("country", columns[5]);
-			//point.addProperty("continent", columns[6]);
+			point.addProperty("region", columns[6]);
 			
 			features.add(point);
 		}
