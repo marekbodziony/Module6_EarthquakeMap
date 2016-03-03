@@ -1,7 +1,6 @@
 package module6;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -122,6 +121,7 @@ public class EarthquakeCityMap extends PApplet {
 	    touristAttractionsMarkers = new ArrayList<Marker>();
 	    
 	    for(Feature attraction : touristAttractions){
+	    	touristAttractionsMarkers.add(new TouristAttractionMarker(attraction));
 	    	System.out.println(attraction.getProperties());
 	    }
 
@@ -136,6 +136,7 @@ public class EarthquakeCityMap extends PApplet {
 	    //           for their geometric properties
 	    map.addMarkers(quakeMarkers);
 	    map.addMarkers(cityMarkers);
+	    map.addMarkers(touristAttractionsMarkers);
 	    
 	    
 	}  // End setup
@@ -181,7 +182,7 @@ public class EarthquakeCityMap extends PApplet {
 		 // printing sorted data ("numToPrint" elements will be printed)
 		 for (int j = 0; j < numToPrint; j++){
 			 if (j < dataToPrint.size()){
-				 System.out.println(j+1 + ". " + dataToPrint.get(j));
+				 //System.out.println(j+1 + ". " + dataToPrint.get(j));
 			 }
 		 }
 	}
@@ -200,6 +201,7 @@ public class EarthquakeCityMap extends PApplet {
 		}
 		selectMarkerIfHover(quakeMarkers);
 		selectMarkerIfHover(cityMarkers);
+		selectMarkerIfHover(touristAttractionsMarkers);
 		//loop();
 	}
 	
@@ -237,9 +239,12 @@ public class EarthquakeCityMap extends PApplet {
 		else if (lastClicked == null) 
 		{
 			checkEarthquakesForClick();
+			
 			if (lastClicked == null) {
 				checkCitiesForClick();
+				checkAttractionsClick();
 			}
+			
 		}
 	}
 	
@@ -264,6 +269,9 @@ public class EarthquakeCityMap extends PApplet {
 							> quakeMarker.threatCircle()) {
 						quakeMarker.setHidden(true);
 					}
+				}
+				for(Marker mhide : touristAttractionsMarkers){
+					mhide.setHidden(true);
 				}
 				return;
 			}
@@ -292,9 +300,45 @@ public class EarthquakeCityMap extends PApplet {
 						mhide.setHidden(true);
 					}
 				}
+				for (Marker mhide : touristAttractionsMarkers){
+					mhide.setHidden(true);
+				}
 				return;
 			}
 		}
+	}
+	
+	// helper method that will check if any of attractions Marker was clicked (if yes hide all Marker from other regions)
+	private void checkAttractionsClick(){
+		//if there's any marker clicked - do nothing
+		if (lastClicked != null){
+			return;
+			}
+		
+		String attractionRegion = null;
+		
+		// check which touristAttractionMarker was clicked
+		for(Marker attractionMarker : touristAttractionsMarkers){
+			if(!attractionMarker.isHidden() && attractionMarker.isInside(map, mouseX, mouseY)){
+				lastClicked = (CommonMarker)attractionMarker;
+				attractionRegion = attractionMarker.getProperty("region").toString();
+			}
+		}
+			// hide all quake markers
+			for(Marker mhide : 	quakeMarkers){
+				if (lastClicked!=null){	mhide.setHidden(true);}
+				}
+			// hide all city markers
+			for (Marker mhide : cityMarkers){
+				if (lastClicked!=null){ mhide.setHidden(true);}
+			}
+			// hide all attractions markers except markers from the same region 
+			for (Marker mhide : touristAttractionsMarkers){
+				if(lastClicked!=null && mhide!=lastClicked && !(mhide.getProperty("region")).equals(attractionRegion)){
+					mhide.setHidden(true);
+				}
+			}
+		
 	}
 	
 	// loop over and unhide all markers
@@ -306,8 +350,16 @@ public class EarthquakeCityMap extends PApplet {
 		for(Marker marker : cityMarkers) {
 			marker.setHidden(false);
 		}
+		
+		for(Marker marker : touristAttractionsMarkers) {
+			marker.setHidden(false);
+		}
 	}
 	
+	@Override
+	public void keyPressed(){
+		
+	}
 	// helper method to draw key in GUI
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here
@@ -333,36 +385,41 @@ public class EarthquakeCityMap extends PApplet {
 		fill(0, 0, 0);
 		textAlign(LEFT, CENTER);
 		text("City Marker", tri_xbase + 15, tri_ybase);
+		text("Attractions", xbase+50, ybase+70);
 		
-		text("Land Quake", xbase+50, ybase+70);
-		text("Ocean Quake", xbase+50, ybase+90);
-		text("Size ~ Magnitude", xbase+25, ybase+110);
+		text("Land Quake", xbase+50, ybase+90);
+		text("Ocean Quake", xbase+50, ybase+110);
+		text("Size ~ Magnitude", xbase+25, ybase+130);
+		
+		fill(0,192,0);
+		rect(xbase+35-TouristAttractionMarker.SQR_SIZE/2, ybase+70, TouristAttractionMarker.SQR_SIZE, 2*TouristAttractionMarker.SQR_SIZE/3);
+		triangle(xbase+35-TouristAttractionMarker.TRI_SIZE, ybase+70, xbase+35+TouristAttractionMarker.TRI_SIZE, ybase+70, xbase+35, (ybase+70)-3*TouristAttractionMarker.TRI_SIZE/4);
 		
 		fill(255, 255, 255);
 		ellipse(xbase+35, 
-				ybase+70, 
+				ybase+90, 
 				10, 
 				10);
-		rect(xbase+35-5, ybase+90-5, 10, 10);
+		rect(xbase+35-5, ybase+110-5, 10, 10);
 		
 		fill(color(255, 255, 0));
-		ellipse(xbase+35, ybase+140, 12, 12);
-		fill(color(0, 0, 255));
 		ellipse(xbase+35, ybase+160, 12, 12);
-		fill(color(255, 0, 0));
+		fill(color(0, 0, 255));
 		ellipse(xbase+35, ybase+180, 12, 12);
+		fill(color(255, 0, 0));
+		ellipse(xbase+35, ybase+200, 12, 12);
 		
 		textAlign(LEFT, CENTER);
 		fill(0, 0, 0);
-		text("Shallow", xbase+50, ybase+140);
-		text("Intermediate", xbase+50, ybase+160);
-		text("Deep", xbase+50, ybase+180);
+		text("Shallow", xbase+50, ybase+160);
+		text("Intermediate", xbase+50, ybase+180);
+		text("Deep", xbase+50, ybase+200);
 
-		text("Past hour", xbase+50, ybase+200);
+		text("Past hour", xbase+50, ybase+220);
 		
 		fill(255, 255, 255);
 		int centerx = xbase+35;
-		int centery = ybase+200;
+		int centery = ybase+220;
 		ellipse(centerx, centery, 12, 12);
 
 		strokeWeight(2);
