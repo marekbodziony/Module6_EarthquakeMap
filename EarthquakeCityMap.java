@@ -276,13 +276,10 @@ public class EarthquakeCityMap extends PApplet {
 					if (quakeMarker.getDistanceTo(marker.getLocation()) 
 							> quakeMarker.threatCircle()) {
 						quakeMarker.setHidden(true);
-						quakeVisibility = false;
 					}
+					else {quakeVisibility = true;}
 				}
-				for(Marker mhide : touristAttractionsMarkers){
-					mhide.setHidden(true);
-					attractionVisibility = false;
-				}
+				hideAttractionMarkers();
 				return;
 			}
 		}		
@@ -311,10 +308,7 @@ public class EarthquakeCityMap extends PApplet {
 						cityVisibility = false;
 					}
 				}
-				for (Marker mhide : touristAttractionsMarkers){
-					mhide.setHidden(true);
-					attractionVisibility = true;
-				}
+				hideAttractionMarkers();
 				return;
 			}
 		}
@@ -458,7 +452,7 @@ public class EarthquakeCityMap extends PApplet {
 		int xbase = 25;
 		int ybase = 50;
 		
-		rect(xbase, ybase, 150, 250);
+		rect(xbase, ybase, 150, 350);
 		
 		fill(0);
 		textAlign(LEFT, CENTER);
@@ -516,7 +510,13 @@ public class EarthquakeCityMap extends PApplet {
 		line(centerx-8, centery-8, centerx+8, centery+8);
 		line(centerx-8, centery+8, centerx+8, centery-8);
 		
-		
+		fill(0, 0, 0);
+		text("1 - show/hide",xbase+27, ybase+250 );
+		text("earthquakes",xbase+50, ybase+265);
+		text("2 - show/hide",xbase+27, ybase+285 );
+		text("cities",xbase+50, ybase+300);
+		text("3 - show/hide",xbase+27, ybase+320);
+		text("tourist attractions",xbase+45, ybase+335);
 	}
 
 	
